@@ -95,9 +95,7 @@ app.post('/api/todo', async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: "task created successfully",
-      data: {
-        task: newTasks[0],
-      }
+      data: newTasks[0]
     })
   } catch (error) {
     await session.abortTransaction();
