@@ -1,10 +1,10 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 
-import errorMiddleware from '../middleware/error-middleware.js';
-import { DB_URI, NODE_ENV, PORT } from '../config/env.js';
-import connectToDatabase from '../database/mongodb.js';
-import Todo from '../models/todo-model.js';
+import errorMiddleware from './middleware/error-middleware.js';
+import { DB_URI, NODE_ENV, PORT } from './config/env.js';
+import connectToDatabase from './database/mongodb.js';
+import Todo from './models/todo-model.js';
 import mongoose from 'mongoose';
 import ServerlessHttp from 'serverless-http';
 
@@ -105,11 +105,4 @@ app.post('/api/todo', async (req, res, next) => {
 
 
 app.use(errorMiddleware);
-// app.listen(PORT, async () => {
-//   console.log('Server is Running on port : ', PORT);
-
-//   await connectToDatabase()
-// })
-
-// export default app;
 export default ServerlessHttp(app);
