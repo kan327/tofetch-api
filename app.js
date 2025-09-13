@@ -6,6 +6,7 @@ import { DB_URI, NODE_ENV, PORT } from './config/env.js';
 import connectToDatabase from './database/mongodb.js';
 import Todo from './models/todo-model.js';
 import mongoose from 'mongoose';
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
