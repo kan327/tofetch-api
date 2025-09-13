@@ -1,10 +1,26 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
+
 import errorMiddleware from './middleware/error-middleware.js';
 import { PORT } from './config/env.js';
 import connectToDatabase from './database/mongodb.js';
 import Todo from './models/todo-model.js';
 
 const app = express();
+
+// 🚫 Rate Limiting Middleware: Maksimal 100 request per 15 menit per IP
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 15 menit
+  max: 60, // max 100 request per window per IP
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false,  // Disable the `X-RateLimit-*` headers
+  message: {
+    success: false,
+    message: "Too many requests, please try again later."
+  }
+});
+app.use(limiter);
+
 
 app.get('/', (req, res) => {
   res.json({
