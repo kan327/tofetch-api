@@ -1,10 +1,10 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 
-import errorMiddleware from './middleware/error-middleware.js';
-import { DB_URI, NODE_ENV, PORT } from './config/env.js';
-import connectToDatabase from './database/mongodb.js';
-import Todo from './models/todo-model.js';
+import errorMiddleware from '../middleware/error-middleware.js';
+import { DB_URI, NODE_ENV, PORT } from '../config/env.js';
+import connectToDatabase from '../database/mongodb.js';
+import Todo from '../models/todo-model.js';
 import mongoose from 'mongoose';
 import ServerlessHttp from 'serverless-http';
 
@@ -24,7 +24,6 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-await connectToDatabase()
 app.get('/', (req, res) => {
   res.json({
     logUri: DB_URI,
@@ -46,6 +45,11 @@ app.get('/', (req, res) => {
       }
     }
   });
+});
+
+app.use(async (req, res, next) => {
+  await connectToDatabase();
+  next();
 });
 
 app.get('/api/todo', async (req, res, next) => {
