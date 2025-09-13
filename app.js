@@ -7,7 +7,8 @@ import connectToDatabase from './database/mongodb.js';
 import Todo from './models/todo-model.js';
 
 const app = express();
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 // 🚫 Rate Limiting Middleware: Maksimal 100 request per 15 menit per IP
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 15 menit
