@@ -6,7 +6,7 @@ import { DB_URI, NODE_ENV, PORT } from './config/env.js';
 import connectToDatabase from './database/mongodb.js';
 import Todo from './models/todo-model.js';
 import mongoose from 'mongoose';
-import ServerlessHttp from 'serverless-http';
+import Serverless from 'serverless-http';
 
 const app = express();
 app.use(express.json());
@@ -105,4 +105,4 @@ app.post('/api/todo', async (req, res, next) => {
 
 
 app.use(errorMiddleware);
-export default ServerlessHttp(app);
+export default Serverless(app);
