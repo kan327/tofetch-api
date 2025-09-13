@@ -5,6 +5,8 @@ import errorMiddleware from './middleware/error-middleware.js';
 import { DB_URI, NODE_ENV, PORT } from './config/env.js';
 import connectToDatabase from './database/mongodb.js';
 import Todo from './models/todo-model.js';
+import mongoose from 'mongoose';
+import ServerlessHttp from 'serverless-http';
 
 const app = express();
 app.use(express.json());
@@ -22,7 +24,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-
+await connectToDatabase()
 app.get('/', (req, res) => {
   res.json({
     logUri: DB_URI,
@@ -67,6 +69,14 @@ app.post('/api/todo', async (req, res, next) => {
   try {
     const { task } = req.body;
 
+    if(!task) {
+      return res.status(422).json({
+        success: false,
+        message: "task cannot be empty",
+        data: {}
+      })
+    }
+
     const newTasks = await Todo.create([{
       task: task
     }], { session });
@@ -78,7 +88,7 @@ app.post('/api/todo', async (req, res, next) => {
       success: true,
       message: "task created successfully",
       data: {
-        task: newtasks[0],
+        task: newTasks[0],
       }
     })
   } catch (error) {
@@ -91,10 +101,11 @@ app.post('/api/todo', async (req, res, next) => {
 
 
 app.use(errorMiddleware);
-app.listen(PORT, async () => {
-  console.log('Server is Running on port : ', PORT);
+// app.listen(PORT, async () => {
+//   console.log('Server is Running on port : ', PORT);
 
-  await connectToDatabase()
-})
+//   await connectToDatabase()
+// })
 
-export default app;
+// export default app;
+export default ServerlessHttp(app);

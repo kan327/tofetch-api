@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import { DB_URI, NODE_ENV } from "../config/env.js";
 
 if(!DB_URI) {
+  console.log("process.env.DB_URI");
+  console.log(process.env.DB_URI);
+  
   throw new Error("DB_URI is not defined in environment variables");
 }
 
