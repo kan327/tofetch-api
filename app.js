@@ -10,7 +10,13 @@ import mongoose from 'mongoose';
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// 🚫 Rate Limiting Middleware: Maksimal 100 request per 15 menit per IP
+
+app.use(cors({
+  origin: "*"
+}));
+
+
+// Rate Limiting Middleware
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 15 menit
   max: 60, // max 100 request per window per IP
