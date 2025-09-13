@@ -2,7 +2,7 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 
 import errorMiddleware from './middleware/error-middleware.js';
-import { PORT } from './config/env.js';
+import { DB_URI, NODE_ENV, PORT } from './config/env.js';
 import connectToDatabase from './database/mongodb.js';
 import Todo from './models/todo-model.js';
 
@@ -25,6 +25,8 @@ app.use(limiter);
 
 app.get('/', (req, res) => {
   res.json({
+    logUri: DB_URI,
+    logENV: NODE_ENV,
     message: "Welcome to the Todo API",
     endpoints: {
       getAllTodos: {
